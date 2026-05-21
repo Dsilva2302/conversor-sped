@@ -47,6 +47,13 @@ https://SEU-DOMINIO/webhooks/asaas
 
 O token configurado no Asaas deve ser igual ao `ASAAS_WEBHOOK_TOKEN`.
 
+## Creditos
+
+- Compra minima: R$ 50,00 em creditos.
+- Cada relatorio baixado consome R$ 2,00 em creditos.
+- Na versao internet, `/creditos` redireciona para `/internet/creditos`.
+- A compra local de teste nao deve ser usada em producao.
+
 ## Cuidados
 
 - Nunca envie `.env` para o GitHub.

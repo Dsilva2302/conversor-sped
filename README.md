@@ -181,12 +181,16 @@ O serviço `app/services/pagamento_service.py` contém:
 
 ### Compra de créditos
 
-A tela `/creditos` funciona de duas formas:
+ A tela `/creditos` funciona em modo teste apenas na versão local.
+
+Na versão internet, a compra real fica em `/internet/creditos` e `/creditos` redireciona para esse fluxo.
 
 - Sem `ASAAS_API_KEY`: modo teste local, credita automaticamente.
 - Com `ASAAS_API_KEY`: cria uma cobrança real no Asaas e deixa a compra como `PENDENTE`.
 
-Cada crédito vale R$ 1,00 e cada TXT baixado consome R$ 1,00.
+Cada crédito vale R$ 1,00. A compra mínima na versão internet é de R$ 50,00 em créditos.
+
+Cada relatório baixado consome R$ 2,00 em créditos.
 
 O pagamento é feito pela página segura do Asaas (`invoiceUrl`). Para Pix, o sistema também tenta exibir QR Code e Pix copia-e-cola.
 

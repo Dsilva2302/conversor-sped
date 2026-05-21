@@ -24,6 +24,8 @@ from app.services.assinatura_service import garantir_planos
 
 app = FastAPI(title="Conversor SPED para Excel - Internet")
 
+routes_local.MODO_INTERNET = True
+
 app.include_router(routes_local.router)
 app.include_router(routes_creditos_internet.router)
 app.include_router(routes_auth.router)

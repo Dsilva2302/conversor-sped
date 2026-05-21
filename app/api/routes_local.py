@@ -25,6 +25,7 @@ router = APIRouter(tags=["programa-local"])
 
 LOCAL_ROOT = settings.STORAGE_ROOT / "local"
 JOBS: dict[str, dict] = {}
+MODO_INTERNET = False
 
 
 def _asset_root() -> Path:
@@ -50,12 +51,13 @@ def _usuario_logado(request: Request, db: Session) -> Usuario | None:
 
 def _html_base(conteudo: str, usuario: Usuario | None = None, saldo: Decimal | None = None) -> str:
     nav = ""
+    link_creditos = "/internet/creditos" if MODO_INTERNET else "/creditos"
     if usuario:
         nav = f"""
             <nav>
                 <span>{usuario.nome}</span>
                 <strong id="saldo-creditos">Creditos: R$ {saldo or Decimal("0.00")}</strong>
-                <a href="/creditos">Comprar creditos</a>
+                <a href="{link_creditos}">Comprar creditos</a>
                 <a href="/sair">Sair</a>
             </nav>
         """
@@ -234,7 +236,7 @@ def _html_base(conteudo: str, usuario: Usuario | None = None, saldo: Decimal | N
     <body>
         <header>
             <h1>Conversor SPED para Excel</h1>
-            <p>Cada TXT convertido custa R$ 1,00 em creditos para baixar o Excel.</p>
+            <p>Cada TXT convertido custa R$ {CUSTO_POR_RELATORIO:.2f} em creditos para baixar o Excel.</p>
             {nav}
         </header>
         <main>
@@ -538,15 +540,17 @@ def sair():
 
 @router.get("/creditos", response_class=HTMLResponse)
 def creditos_tela(request: Request):
+    if MODO_INTERNET:
+        return RedirectResponse("/internet/creditos", status_code=303)
     with _db() as db:
         usuario = _usuario_logado(request, db)
         if not usuario:
             return RedirectResponse("/login", status_code=303)
         saldo = saldo_creditos(db, usuario.id)
     return _html_base(
-        """
+        f"""
         <h2>Comprar creditos</h2>
-        <p>Cada TXT convertido custa <strong>R$ 1,00</strong> para baixar o Excel.</p>
+        <p>Cada TXT convertido custa <strong>R$ {CUSTO_POR_RELATORIO:.2f}</strong> para baixar o Excel.</p>
         <form method="post" action="/creditos/comprar">
             <label>Quantidade de creditos</label>
             <input type="number" name="quantidade" min="1" step="1" value="10" required>
@@ -570,6 +574,8 @@ def creditos_comprar(
     quantidade: int = Form(...),
     forma_pagamento: str = Form(...),
 ):
+    if MODO_INTERNET:
+        return RedirectResponse("/internet/creditos", status_code=303)
     quantidade = max(1, int(quantidade))
     with _db() as db:
         usuario = _usuario_logado(request, db)

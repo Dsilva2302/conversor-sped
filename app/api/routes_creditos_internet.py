@@ -13,11 +13,12 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app.database.models import CompraCredito, Usuario
 from app.database.session import SessionLocal
-from app.services.credito_service import saldo_creditos
+from app.services.credito_service import CUSTO_POR_RELATORIO, saldo_creditos
 from app.services.pagamento_service import asaas_configurado, atualizar_pix_cobranca_asaas, criar_cobranca_creditos_asaas
 from app.utils.seguranca import decodificar_token
 
 router = APIRouter(prefix="/internet/creditos", tags=["creditos-internet"])
+COMPRA_MINIMA_CREDITOS = 50
 
 
 def _db():
@@ -96,6 +97,8 @@ def tela_comprar_creditos(request: Request):
         f"""
         <h1>Comprar creditos - versao internet</h1>
         <p>Saldo atual: <strong>R$ {saldo:.2f}</strong></p>
+        <p>Cada relatório baixado consome <strong>R$ {CUSTO_POR_RELATORIO:.2f}</strong> em créditos.</p>
+        <p>A compra mínima é de <strong>R$ {COMPRA_MINIMA_CREDITOS:.2f}</strong> em créditos.</p>
         {aviso}
         <form method="post" action="/internet/creditos/comprar">
             <label>CPF ou CNPJ</label>
@@ -103,7 +106,7 @@ def tela_comprar_creditos(request: Request):
             <label>Telefone</label>
             <input type="text" name="telefone" value="{usuario.telefone or ''}">
             <label>Quantidade de creditos</label>
-            <input type="number" name="quantidade" min="5" step="1" value="10" required>
+            <input type="number" name="quantidade" min="{COMPRA_MINIMA_CREDITOS}" step="1" value="{COMPRA_MINIMA_CREDITOS}" required>
             <label>Forma de pagamento</label>
             <select name="forma_pagamento">
                 <option value="PIX">Pix</option>
@@ -131,7 +134,7 @@ def comprar_creditos(
 ):
     if not asaas_configurado():
         raise HTTPException(status_code=400, detail="ASAAS_API_KEY nao configurada.")
-    quantidade = max(5, int(quantidade))
+    quantidade = max(COMPRA_MINIMA_CREDITOS, int(quantidade))
     with _db() as db:
         usuario = _usuario_logado(request, db)
         if not usuario:
@@ -147,7 +150,7 @@ def comprar_creditos(
                 f"""
                 <h1>Nao foi possivel gerar a cobranca</h1>
                 <p>{str(exc)}</p>
-                <p class="muted">Confira CPF/CNPJ, tente no minimo 5 creditos e use a chave sandbox correta.</p>
+                <p class="muted">Confira CPF/CNPJ, tente no minimo R$ {COMPRA_MINIMA_CREDITOS:.2f} em creditos e use a chave do Asaas correta.</p>
                 <p><a class="button" href="/internet/creditos">Voltar</a></p>
                 """
             )
