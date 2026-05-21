@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.database.models import CreditoTransacao
 
-CUSTO_POR_RELATORIO = Decimal("2.00")
+CUSTO_POR_RELATORIO = Decimal("3.00")
 
 
 def saldo_creditos(db: Session, usuario_id: int) -> Decimal:

@@ -19,7 +19,7 @@ from app.services.pagamento_service import asaas_configurado, atualizar_pix_cobr
 from app.utils.seguranca import decodificar_token
 
 router = APIRouter(prefix="/internet/creditos", tags=["creditos-internet"])
-COMPRA_MINIMA_CREDITOS = 50
+COMPRA_MINIMA_CREDITOS = 30
 
 
 def _db():
