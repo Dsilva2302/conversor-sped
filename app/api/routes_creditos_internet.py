@@ -11,6 +11,7 @@ from decimal import Decimal
 from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
+from app.config import settings
 from app.database.models import CompraCredito, Usuario
 from app.database.session import SessionLocal
 from app.services.credito_service import CUSTO_POR_RELATORIO, saldo_creditos
@@ -76,8 +77,11 @@ def tela_comprar_creditos(request: Request):
         )
         saldo = saldo_creditos(db, usuario.id)
 
+    ambiente_sandbox = "sandbox" in settings.ASAAS_BASE_URL.lower()
     if not asaas_configurado():
         aviso = '<div class="alert">ASAAS_API_KEY ainda nao configurada. Esta tela e somente para a versao publicada na internet.</div>'
+    elif ambiente_sandbox:
+        aviso = '<div class="alert">Ambiente Sandbox: nao use aplicativo de banco real para pagar. Gere a cobranca e confirme o pagamento no painel Sandbox do Asaas.</div>'
     else:
         aviso = '<p class="muted">Pagamento real via Asaas ativo.</p>'
 
@@ -184,12 +188,23 @@ def pagamento_creditos(request: Request, compra_id: int):
     link = ""
     if compra.invoice_url:
         link = f'<a class="button" href="{compra.invoice_url}" target="_blank" rel="noopener">Abrir pagamento no Asaas</a>'
+    ambiente_sandbox = "sandbox" in settings.ASAAS_BASE_URL.lower()
+    sandbox_aviso = ""
+    if ambiente_sandbox:
+        sandbox_aviso = """
+        <div class="alert">
+            <strong>Teste Sandbox:</strong>
+            este QR Code e ficticio. Para simular o pagamento, abra a cobranca no painel Sandbox do Asaas
+            e clique em Confirmar pagamento. Depois o webhook publica os creditos no sistema.
+        </div>
+        """
 
     return _pagina(
         f"""
         <h1>Pagamento de creditos</h1>
         <p>Pedido #{compra.id} - R$ {Decimal(str(compra.valor)):.2f} - Status: <strong>{compra.status}</strong></p>
         <p class="muted">Depois da confirmacao do Asaas, o webhook libera os creditos automaticamente.</p>
+        {sandbox_aviso}
         {link}
         <div>{pix_img}</div>
         {pix_payload}
