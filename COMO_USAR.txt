@@ -1,0 +1,39 @@
+COMO USAR O CONVERSOR SPED
+
+1. Clique duas vezes em:
+
+   ABRIR_PROGRAMA.bat
+
+   Ou, se preferir abrir sem aparecer nenhuma janela do PowerShell:
+
+   ABRIR_PROGRAMA.vbs
+
+   Se quiser criar um icone na Area de Trabalho, clique duas vezes em:
+
+   CRIAR_ICONE_NA_AREA_DE_TRABALHO.bat
+
+2. O navegador vai abrir em:
+
+   http://127.0.0.1:8765
+
+3. Na tela do navegador:
+
+   - clique em "Selecionar arquivos";
+   - escolha um ou varios arquivos TXT do SPED;
+   - clique em "Converter para Excel";
+   - baixe os arquivos Excel gerados.
+
+4. Para parar o programa, clique duas vezes em:
+
+   4_PARAR_SISTEMA_WEB.bat
+
+Observacoes:
+
+- O programa aceita EFD-Contribuicoes e EFD-ICMS/IPI.
+- Os TXT originais nao sao alterados.
+- O programa roda apenas localmente no seu computador.
+- Nao precisa usar login, assinatura ou tela de API.
+
+Para criar um pacote para enviar para outra pessoa, use:
+
+   CRIAR_PACOTE_PARA_ENVIAR.bat

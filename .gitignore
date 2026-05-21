@@ -1,0 +1,39 @@
+# Secrets and local configuration
+.env
+*.env
+!.env.example
+*chave*
+*senha*
+*token*
+
+# Local database and runtime storage
+*.db
+*.sqlite
+*.sqlite3
+storage/
+
+# Generated reports and client files
+TXT/
+Relatorios*/
+*.xlsx
+*.xls
+*.csv
+*.zip
+
+# Build artifacts
+build/
+dist/
+installer/
+*.spec
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor and OS files
+.vscode/
+.idea/
+Desktop.ini
+Thumbs.db
+
+# Local helper copies
+*.log

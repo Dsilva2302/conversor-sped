@@ -1,0 +1,33 @@
+DISTRIBUICAO DO CONVERSOR SPED
+
+Uso atual:
+
+- O programa roda localmente pelo arquivo ABRIR_PROGRAMA.bat.
+- O icone da Area de Trabalho pode ser criado com CRIAR_ICONE_NA_AREA_DE_TRABALHO.bat.
+- Para enviar uma copia portatil, use CRIAR_PACOTE_PARA_ENVIAR.bat.
+
+Importante:
+
+- O pacote portatil ainda precisa que o computador da outra pessoa tenha Python instalado.
+- A proxima etapa, quando quiser distribuir para clientes sem instalar Python, e gerar um executavel/instalador.
+
+Instalador Windows:
+
+Use CRIAR_INSTALADOR_WINDOWS.bat para gerar:
+
+   dist\Conversor_SPED_Setup.exe
+
+Esse instalador copia o programa para:
+
+   %LOCALAPPDATA%\ConversorSPED
+
+E cria:
+
+- atalho na Area de Trabalho;
+- atalho no Menu Iniciar;
+- icone do programa;
+- abertura automatica no navegador local.
+
+Observacao:
+
+Como o motor SPED ja esta separado da interface, o mesmo codigo pode virar instalador local ou voltar a ser SaaS depois, sem reescrever o parser.
