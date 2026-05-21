@@ -49,8 +49,8 @@ O token configurado no Asaas deve ser igual ao `ASAAS_WEBHOOK_TOKEN`.
 
 ## Creditos
 
-- Compra minima: R$ 30,00 em creditos.
-- Cada relatorio baixado consome R$ 3,00 em creditos.
+- Sem compra minima interna no sistema.
+- Cada relatorio baixado consome R$ 1,00 em creditos.
 - Na versao internet, `/creditos` redireciona para `/internet/creditos`.
 - A compra local de teste nao deve ser usada em producao.
 

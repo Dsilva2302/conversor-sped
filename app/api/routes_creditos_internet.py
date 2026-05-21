@@ -19,7 +19,7 @@ from app.services.pagamento_service import asaas_configurado, atualizar_pix_cobr
 from app.utils.seguranca import decodificar_token
 
 router = APIRouter(prefix="/internet/creditos", tags=["creditos-internet"])
-COMPRA_MINIMA_CREDITOS = 30
+COMPRA_MINIMA_CREDITOS = 1
 
 
 def _db():
@@ -102,7 +102,7 @@ def tela_comprar_creditos(request: Request):
         <h1>Comprar creditos - versao internet</h1>
         <p>Saldo atual: <strong>R$ {saldo:.2f}</strong></p>
         <p>Cada relatório baixado consome <strong>R$ {CUSTO_POR_RELATORIO:.2f}</strong> em créditos.</p>
-        <p>A compra mínima é de <strong>R$ {COMPRA_MINIMA_CREDITOS:.2f}</strong> em créditos.</p>
+        <p>Cada crédito custa <strong>R$ 1,00</strong>.</p>
         {aviso}
         <form method="post" action="/internet/creditos/comprar">
             <label>CPF ou CNPJ</label>
@@ -154,7 +154,7 @@ def comprar_creditos(
                 f"""
                 <h1>Nao foi possivel gerar a cobranca</h1>
                 <p>{str(exc)}</p>
-                <p class="muted">Confira CPF/CNPJ, tente no minimo R$ {COMPRA_MINIMA_CREDITOS:.2f} em creditos e use a chave do Asaas correta.</p>
+                <p class="muted">Confira CPF/CNPJ, valor escolhido e chave do Asaas correta.</p>
                 <p><a class="button" href="/internet/creditos">Voltar</a></p>
                 """
             )
